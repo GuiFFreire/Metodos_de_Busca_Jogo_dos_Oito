@@ -7,6 +7,7 @@ Este projeto é uma implementação em Python de algoritmos de busca (como a Bus
 * `interface.py`: Arquivo principal que gerencia a interface gráfica, botões e animações.
 * `busca.py`: Classe abstrata e estrutura de dados base para os algoritmos.
 * `buscaBiDirecional.py`: Implementação do algoritmo de Busca Bidirecional.
+* `buscaAEstrela.py`: Implementação do algoritmo de Busca A*.
 * `utils.py`: Funções auxiliares para manipulação da matriz e geração de estados válidos.
 
 ## Pré-requisitos
