@@ -2,6 +2,7 @@ import pygame
 import sys
 from utils import string_to_matriz, gerar_matriz_embaralhada
 from buscaBiDirecional import BiDirecional
+from buscaAEstrela import AEstrela
 
 # Configurações Iniciais
 pygame.init()
@@ -102,10 +103,12 @@ while rodando:
                 
                 # Algoritmo BiDirecional
                 if algoritmo_selecionado == "BiDirecional":
-                    busca = BiDirecional(matriz_estado_atual, matriz_objetivo)
-                    caminho_calculado, qtd = busca.executarBusca()
-                
-                # Outro aloritmo TO DO
+                    busca = BiDirecional(matriz_estado_atual, matriz_objetivo)           
+                else:
+                    # Certifique-se de ter feito 'from buscaAEstrela import AEstrela' no topo
+                    busca = AEstrela(matriz_estado_atual, matriz_objetivo)
+                    
+                caminho_calculado, qtd = busca.executarBusca()    
 
                 
                 if caminho_calculado:
@@ -115,8 +118,12 @@ while rodando:
 
             # Alternador de algoritmo
             elif btn_algoritmo.checar_clique(pos_mouse):
-                # TO DO
-                pass
+                if algoritmo_selecionado == "BiDirecional":
+                    algoritmo_selecionado = "AEstrela"
+                else:
+                    algoritmo_selecionado = "BiDirecional"
+
+                btn_algoritmo.texto = f"Alg: {algoritmo_selecionado}"
 
     # Animação dos passos
     if estado_sistema == "ANIMANDO":
