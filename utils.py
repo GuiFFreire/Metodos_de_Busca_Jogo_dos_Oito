@@ -50,14 +50,48 @@ def movimentar(matriz, movimento, i, j):
         
     return nova_matriz
 
+def contar_inversoes(matriz):
+    """
+    Transforma a matriz em uma lista (ignorando o 0) e conta quantas 
+    vezes um número maior aparece antes de um número menor.
+    """
+    lista = []
+    for linha in matriz:
+        for num in linha:
+            if num != 0:
+                lista.append(num)
+                
+    inversoes = 0
+    for i in range(len(lista)):
+        for j in range(i + 1, len(lista)):
+            if lista[i] > lista[j]:
+                inversoes += 1
+                
+    return inversoes
+
 def gerar_matriz_embaralhada(matriz_objetivo, passos=30):
-    """ Gera uma matriz inicial. """
+    """
+    Gera uma matriz completamente aleatória, garantindo que seja
+    matematicamente possível chegar ao objetivo.
+    """
+    # Descobre se o objetivo tem paridade par ou ímpar
+    inversoes_objetivo = contar_inversoes(matriz_objetivo)
+    paridade_objetivo = inversoes_objetivo % 2
     
-    matriz_atual = copy.deepcopy(matriz_objetivo)
+    numeros = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     
-    for _ in range(passos):
-        movimentos, i, j = movimentosPermitidos(matriz_atual)
-        movimento_escolhido = random.choice(movimentos)
-        matriz_atual = movimentar(matriz_atual, movimento_escolhido, i, j)
+    while True:
+        # Embaralha os números de forma totalmente aleatória
+        random.shuffle(numeros)
         
-    return matriz_atual
+        # Monta a matriz 3x3
+        nova_matriz = [
+            [numeros[0], numeros[1], numeros[2]],
+            [numeros[3], numeros[4], numeros[5]],
+            [numeros[6], numeros[7], numeros[8]]
+        ]
+        
+        # Se a paridade for igual, o quebra-cabeça tem solução!
+        inversoes_nova = contar_inversoes(nova_matriz)
+        if inversoes_nova % 2 == paridade_objetivo:
+            return nova_matriz

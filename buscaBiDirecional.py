@@ -11,7 +11,7 @@ class BiDirecional(Busca):
         while atual is not None:
             caminho_da_origem.append(atual)
             atual = cam_inicio.caminho[atual]
-        # Reverte para ficar na ordema da busca
+        # Reverte para ficar na ordem da busca
         caminho_da_origem.reverse() 
 
         # Busca do ponto de encointro até o final

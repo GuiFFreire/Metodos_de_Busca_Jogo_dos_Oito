@@ -30,6 +30,8 @@ VERDE_BOTAO = (46, 204, 113)
 VERDE_BOTAO_HOVER = (39, 174, 96)
 VERMELHO_BOTAO = (231, 76, 60)
 VERMELHO_BOTAO_HOVER = (192, 57, 43)
+AMARELO_BOTAO = (241, 196, 15)
+AMARELO_BOTAO_HOVER = (243, 156, 18)
 
 # Classe para controle dos botões na tela
 class Botao:
@@ -60,6 +62,9 @@ class Botao:
 matriz_objetivo = [[1, 2, 3], [8, 0, 4], [7, 6, 5]]
 matriz_estado_atual = gerar_matriz_embaralhada(matriz_objetivo, passos=20)
 
+#Salva o último estado atual
+matriz_inicial = [linha[:] for linha in matriz_estado_atual]
+
 # Variáveis de Controle
 estado_sistema = "AGUARDANDO"
 algoritmo_selecionado = "BiDirecional"
@@ -72,6 +77,7 @@ INTERVALO_ANIMACAO = 1000 # Milissegundos
 btn_executar = Botao(625, 50, 250, 50, "Executar Busca", VERDE_BOTAO, VERDE_BOTAO_HOVER)
 btn_embaralhar = Botao(625, 120, 250, 50, "Embaralhar Nova", VERMELHO_BOTAO, VERMELHO_BOTAO_HOVER)
 btn_algoritmo = Botao(625, 190, 250, 50, f"Alg: {algoritmo_selecionado}", CINZA_ESCURO, CINZA_ESCURO)
+btn_resetar = Botao(625, 260, 250, 50, "Resetar Matriz", AMARELO_BOTAO, AMARELO_BOTAO_HOVER)
 
 rodando = True
 while rodando:
@@ -95,6 +101,14 @@ while rodando:
             # Clique em EMBARALHAR
             if btn_embaralhar.checar_clique(pos_mouse):
                 matriz_estado_atual = gerar_matriz_embaralhada(matriz_objetivo)
+                matriz_inicial = [linha[:] for linha in matriz_estado_atual]
+                estado_sistema = "AGUARDANDO"
+                caminho_calculado = []
+
+            # Clique em RESETAR
+            elif btn_resetar.checar_clique(pos_mouse):
+                # Puxa a cópia salva de volta para a tela
+                matriz_estado_atual = [linha[:] for linha in matriz_inicial]
                 estado_sistema = "AGUARDANDO"
                 caminho_calculado = []
 
@@ -105,7 +119,6 @@ while rodando:
                 if algoritmo_selecionado == "BiDirecional":
                     busca = BiDirecional(matriz_estado_atual, matriz_objetivo)           
                 else:
-                    # Certifique-se de ter feito 'from buscaAEstrela import AEstrela' no topo
                     busca = AEstrela(matriz_estado_atual, matriz_objetivo)
                     
                 caminho_calculado, qtd = busca.executarBusca()    
@@ -160,14 +173,15 @@ while rodando:
     btn_executar.desenhar(tela)
     btn_embaralhar.desenhar(tela)
     btn_algoritmo.desenhar(tela)
+    btn_resetar.desenhar(tela)
 
     # Desenha o Status do Sistema
     texto_status = fonte_status.render(f"Status: {estado_sistema}", True, BRANCO)
-    tela.blit(texto_status, (625, 270))
+    tela.blit(texto_status, (625, 340))
     
     if estado_sistema in ["ANIMANDO", "FINALIZADO"]:
         passos_txt = fonte_status.render(f"Passos: {indice_passo} / {len(caminho_calculado)}", True, BRANCO)
-        tela.blit(passos_txt, (625, 300))
+        tela.blit(passos_txt, (625, 380))
 
     # ATtualiza o display
     pygame.display.flip()
